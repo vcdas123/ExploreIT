@@ -15,17 +15,12 @@ import { Type } from "class-transformer";
 import { LocationDto } from "./location.dto";
 import { SlotDto } from "./slot.dto";
 import { TourImageDto } from "./tourImage.dto";
+import { Status } from "../entities/tour.entity";
 
 enum Difficulty {
   EASY = "easy",
   MEDIUM = "medium",
   DIFFICULT = "difficult",
-}
-
-export enum Status {
-  DELETE = 0,
-  ACTIVE = 1,
-  INACTIVE = 2,
 }
 
 export class TourDto {

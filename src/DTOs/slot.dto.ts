@@ -8,12 +8,7 @@ import {
   Length,
 } from "class-validator";
 import { Transform } from "class-transformer";
-
-enum Status {
-  DELETE = 0,
-  ACTIVE = 1,
-  INACTIVE = 2,
-}
+import { Status } from "../entities/tour.entity";
 
 export class SlotDto {
   @Transform(({ value }) => new Date(value))

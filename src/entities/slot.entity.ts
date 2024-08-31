@@ -8,16 +8,22 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Status, Tour } from "./tour.entity";
+import { Tour } from "./tour.entity";
 import { User } from "./user.entity";
 import { BaseLocation } from "./baseClasses/BaseLocation";
+
+export enum Status {
+  DELETED = "0",
+  ACTIVE = "1",
+  INACTIVE = "2",
+}
 
 @Entity()
 export class Slot {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "enum", enum: [0, 1, 2], default: 1 })
+  @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
   status: Status;
 
   @Column({ type: "timestamp" })

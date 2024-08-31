@@ -14,10 +14,19 @@ import { MinLength } from "class-validator";
 
 type Role = "user" | "admin" | "guide";
 
+export enum Status {
+  DELETED = "0",
+  ACTIVE = "1",
+  INACTIVE = "2",
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
+  status: Status;
 
   @Column({ type: "varchar", length: 255, unique: true })
   userName: string;

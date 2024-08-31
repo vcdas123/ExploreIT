@@ -16,7 +16,12 @@ import { Bookmark } from "./bookmark.entity";
 import { IsLessThan } from "../validators/IsLessThan";
 
 export type Difficulty = "easy" | "medium" | "difficult";
-export type Status = 0 | 1 | 2; // 0 - delete | 1 - active | 2 - inactive
+
+export enum Status {
+  DELETED = "0",
+  ACTIVE = "1",
+  INACTIVE = "2",
+}
 
 @Entity()
 export class Tour {
@@ -37,7 +42,7 @@ export class Tour {
   @Column({ type: "enum", enum: ["easy", "medium", "difficult"] })
   difficulty: Difficulty;
 
-  @Column({ type: "enum", enum: [0, 1, 2], default: 1 })
+  @Column({ type: "enum", enum: Status, default: Status.ACTIVE })
   status: Status;
 
   @Column({ type: "decimal", precision: 10, scale: 2 })

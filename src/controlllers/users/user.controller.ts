@@ -5,16 +5,7 @@ import { AppDataSource } from "../../appDataSource";
 import { UserDto } from "../../DTOs/user.dto";
 import { User } from "../../entities/user.entity";
 
-export const createSlots = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-  } catch (error) {}
-};
-
-export const updateSlots = async (
+export const createUser = async (
   req: Request,
   res: Response,
   next: NextFunction

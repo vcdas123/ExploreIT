@@ -29,14 +29,12 @@ export const attachLocations = async (locations: any[]) => {
     return await Promise.all(
       locations?.map(async item => {
         const loc = new Location();
+        const { name, description, ...rest } = item;
         loc.name = item.name;
         loc.description = item.description;
-        loc.location.longitude = item.longitude;
-        loc.location.latitude = item.latitude;
-        loc.location.city = item.city;
-        loc.location.state = item.state;
-        loc.location.country = item.country;
-        loc.location.postalCode = item.postalCode;
+        loc.location = {
+          ...rest,
+        };
         loc.images = attachLocationsImages(item.images);
 
         const locType = await locationTypeRepo.findOneBy({

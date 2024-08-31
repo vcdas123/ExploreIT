@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { TourDto } from "../../DTOs/tour.dto";
 import { isArray, validateOrReject, ValidationError } from "class-validator";
 import { AppDataSource } from "../../appDataSource";
-import { Tour } from "../../entities/tour.entity";
+import { Status, Tour } from "../../entities/tour.entity";
 import { formatValidationErrors } from "../../utilities/errors/ErrorFormatter";
 import {
   attachAdditionalImages,
@@ -32,7 +32,7 @@ export const createTour = async (
     const tour = new Tour();
     tour.name = req.body.name;
     tour.difficulty = req.body.difficulty;
-    tour.status = 1;
+    tour.status = Status.ACTIVE;
     tour.slug = createSlug(req.body.name);
     tour.price = req.body.price;
     tour.priceDiscount = req.body.priceDiscount;
@@ -52,6 +52,8 @@ export const createTour = async (
       },
     });
   } catch (errors) {
+    console.log(errors);
+
     const validationErrors = errors as ValidationError[];
 
     return res.status(400).json({
@@ -82,7 +84,7 @@ export const getAllTours = async (
         "slots.guides",
       ],
       where: {
-        status: 1,
+        status: Status.ACTIVE,
       },
     });
 
