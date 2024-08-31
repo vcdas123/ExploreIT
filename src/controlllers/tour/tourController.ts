@@ -1,15 +1,12 @@
 import { plainToInstance } from "class-transformer";
 import { NextFunction, Request, Response } from "express";
 import slugify from "slugify";
-import { TourDto } from "../DTOs/tour.dto";
+import { TourDto } from "../../DTOs/tour.dto";
 import { isArray, validateOrReject, ValidationError } from "class-validator";
-import { AppDataSource } from "../appDataSource";
-import { Tour } from "../entities/tour.entity";
-import { TourImage } from "../entities/tourImage.entity";
-import { LocationImage } from "../entities/locationImage.entity";
-import { Location } from "../entities/location.entity";
-import { LocationType } from "../entities/locationType.entity";
-import { formatValidationErrors } from "../utilities/errors/ErrorFormatter";
+import { AppDataSource } from "../../appDataSource";
+import { Tour } from "../../entities/tour.entity";
+import { formatValidationErrors } from "../../utilities/errors/ErrorFormatter";
+import { createAdditionalImages, createLocation } from "./helpers/helpers";
 
 export const createTour = async (
   req: Request,
@@ -27,52 +24,6 @@ export const createTour = async (
     });
 
     const tourRepo = AppDataSource.getRepository(Tour);
-    const locationTypeRepo = AppDataSource.getRepository(LocationType);
-
-    const createAdditionalImages = (images: any[]) => {
-      return images?.map(item => {
-        const tourImage = new TourImage();
-        tourImage.image = item.image;
-        tourImage.imageType = item.imageType;
-        return tourImage;
-      });
-    };
-
-    const createLocationImages = (images: any[]) => {
-      return images?.map(item => {
-        const locationImage = new LocationImage();
-        locationImage.image = item.image;
-        locationImage.imageType = item.imageType;
-        return locationImage;
-      });
-    };
-
-    const createLocations = async (locations: any[]) => {
-      return await Promise.all(
-        locations?.map(async item => {
-          const location = new Location();
-          location.name = item.name;
-          location.description = item.description;
-          location.longitude = item.longitude;
-          location.latitude = item.latitude;
-          location.city = item.city;
-          location.state = item.state;
-          location.country = item.country;
-          location.postalCode = item.postalCode;
-          location.images = createLocationImages(item.images);
-
-          const locationType = await locationTypeRepo.findOneBy({
-            id: item.typeId,
-          });
-          if (!locationType) {
-            throw new Error(`LocationType with ID ${item.typeId} not found`);
-          }
-
-          location.type = locationType;
-          return location;
-        })
-      );
-    };
 
     const tour = new Tour();
     tour.name = req.body.name;
@@ -88,7 +39,7 @@ export const createTour = async (
     tour.summary = req.body.summary;
     tour.description = req.body.description;
     tour.additionalImages = createAdditionalImages(req.body.additionalImages);
-    tour.locations = await createLocations(req.body.locations);
+    tour.locations = await createLocation(req.body.locations);
 
     await tourRepo.save(tour);
 
@@ -111,6 +62,7 @@ export const createTour = async (
     });
   }
 };
+
 export const getAllTours = async (
   req: Request,
   res: Response,
@@ -147,5 +99,3 @@ export const getAllTours = async (
     });
   }
 };
-
-// hasd

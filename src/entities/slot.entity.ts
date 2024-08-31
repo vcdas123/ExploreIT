@@ -12,6 +12,7 @@ import { Tour } from "./tour.entity";
 import { User } from "./user.entity";
 import { IsAlpha } from "class-validator";
 import { IsAlphaCheck } from "../validators/IsAlphaCheck";
+import { BaseLocation } from "./baseClasses/BaseLocation";
 
 @Entity()
 export class Slot {
@@ -33,35 +34,8 @@ export class Slot {
   @Column({ type: "int" })
   maxGroupSize: number;
 
-  @Column({ type: "varchar", length: 20 })
-  meetingLocationLongitude: string;
-
-  @Column({ type: "varchar", length: 20 })
-  meetingLocationLatitude: string;
-
-  @Column({ type: "varchar" })
-  @IsAlphaCheck({
-    message:
-      "Meeting location city (meetingLocationCity) must contain only alphabetic characters and spaces",
-  })
-  meetingLocationCity: string;
-
-  @Column({ type: "varchar" })
-  @IsAlphaCheck({
-    message:
-      "Meeting location state (meetingLocationState) must contain only alphabetic characters and spaces",
-  })
-  meetingLocationState: string;
-
-  @Column({ type: "varchar" })
-  @IsAlphaCheck({
-    message:
-      "Meeting location country (meetingLocationCountry) must contain only alphabetic characters and spaces",
-  })
-  meetingLocationCountry: string;
-
-  @Column({ type: "varchar" })
-  meetingLocationPostalCode: string;
+  @Column(() => BaseLocation)
+  meetingLoc: BaseLocation;
 
   @Column()
   @CreateDateColumn()

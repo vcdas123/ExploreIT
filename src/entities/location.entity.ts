@@ -12,6 +12,7 @@ import { Tour } from "./tour.entity";
 import { LocationImage } from "./locationImage.entity";
 import { IsAlpha, Length } from "class-validator";
 import { IsAlphaCheck } from "../validators/IsAlphaCheck";
+import { BaseLocation } from "./baseClasses/BaseLocation";
 
 @Entity()
 export class Location {
@@ -30,23 +31,8 @@ export class Location {
   @Column({ type: "text" })
   description: string;
 
-  @Column({ type: "varchar", length: 20 })
-  longitude: string;
-
-  @Column({ type: "varchar", length: 20 })
-  latitude: string;
-
-  @Column({ type: "varchar" })
-  city: string;
-
-  @Column({ type: "varchar" })
-  state: string;
-
-  @Column({ type: "varchar" })
-  country: string;
-
-  @Column({ type: "varchar" })
-  postalCode: string;
+  @Column(() => BaseLocation)
+  location: BaseLocation;
 
   @CreateDateColumn()
   createdAt: Date;
