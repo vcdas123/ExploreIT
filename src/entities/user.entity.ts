@@ -10,6 +10,7 @@ import {
 import { Slot } from "./slot.entity";
 import { Review } from "./review.entity";
 import { Bookmark } from "./bookmark.entity";
+import { MinLength } from "class-validator";
 
 type Role = "user" | "admin" | "guide";
 
@@ -24,6 +25,7 @@ export class User {
   @Column({ type: "varchar", length: 255, unique: true })
   email: string;
 
+  @MinLength(6)
   @Column({ type: "varchar", length: 255 })
   password: string;
 
@@ -39,7 +41,7 @@ export class User {
   @Column({ type: "text" })
   profilePhoto: string;
 
-  @Column({ type: "enum", enum: ["user", "admin", "guide"] })
+  @Column({ type: "enum", enum: ["user", "admin", "guide"], default: "user" })
   role: Role;
 
   @CreateDateColumn()

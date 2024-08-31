@@ -4,7 +4,7 @@ import { LocationImage } from "../../../entities/locationImage.entity";
 import { LocationType } from "../../../entities/locationType.entity";
 import { TourImage } from "../../../entities/tourImage.entity";
 
-export const createAdditionalImages = (images: any[]) => {
+export const attachAdditionalImages = (images: any[]) => {
   return images?.map(item => {
     const tourImage = new TourImage();
     tourImage.image = item.image;
@@ -13,10 +13,10 @@ export const createAdditionalImages = (images: any[]) => {
   });
 };
 
-export const createLocation = async (locations: any[]) => {
+export const attachLocations = async (locations: any[]) => {
   const locationTypeRepo = AppDataSource.getRepository(LocationType);
 
-  const createLocationImages = (images: any[]) => {
+  const attachLocationsImages = (images: any[]) => {
     return images?.map(item => {
       const locationImage = new LocationImage();
       locationImage.image = item.image;
@@ -37,7 +37,7 @@ export const createLocation = async (locations: any[]) => {
         loc.location.state = item.state;
         loc.location.country = item.country;
         loc.location.postalCode = item.postalCode;
-        loc.images = createLocationImages(item.images);
+        loc.images = attachLocationsImages(item.images);
 
         const locType = await locationTypeRepo.findOneBy({
           id: item.typeId,
@@ -54,3 +54,5 @@ export const createLocation = async (locations: any[]) => {
 
   return loc();
 };
+
+export const attachSlots = async (slots: any[]) => {};

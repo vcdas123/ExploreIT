@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -89,9 +90,6 @@ export class Tour {
   @IsOptional()
   reviews: Review[];
 
-  @OneToMany(() => Bookmark, bookmark => bookmark.tour, {
-    cascade: true,
-  })
-  @IsOptional()
+  @ManyToMany(() => Bookmark, bookmark => bookmark.tours)
   bookmarks: Bookmark[];
 }

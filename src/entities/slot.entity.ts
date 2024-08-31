@@ -8,16 +8,17 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Tour } from "./tour.entity";
+import { Status, Tour } from "./tour.entity";
 import { User } from "./user.entity";
-import { IsAlpha } from "class-validator";
-import { IsAlphaCheck } from "../validators/IsAlphaCheck";
 import { BaseLocation } from "./baseClasses/BaseLocation";
 
 @Entity()
 export class Slot {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: "enum", enum: [0, 1, 2], default: 1 })
+  status: Status;
 
   @Column({ type: "timestamp" })
   startDateAndTime: Date;
@@ -35,7 +36,7 @@ export class Slot {
   maxGroupSize: number;
 
   @Column(() => BaseLocation)
-  meetingLoc: BaseLocation;
+  meetingLocation: BaseLocation;
 
   @Column()
   @CreateDateColumn()

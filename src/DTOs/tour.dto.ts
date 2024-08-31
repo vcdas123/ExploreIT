@@ -16,7 +16,7 @@ import { LocationDto } from "./location.dto";
 import { SlotDto } from "./slot.dto";
 import { TourImageDto } from "./tourImage.dto";
 
-export enum Difficulty {
+enum Difficulty {
   EASY = "easy",
   MEDIUM = "medium",
   DIFFICULT = "difficult",
@@ -65,10 +65,10 @@ export class TourDto {
   @IsNotEmpty()
   locations: LocationDto[];
 
-  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => SlotDto)
+  @IsOptional()
   slots: SlotDto[];
 
   @IsArray()

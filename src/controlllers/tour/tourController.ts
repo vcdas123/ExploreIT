@@ -1,12 +1,16 @@
 import { plainToInstance } from "class-transformer";
 import { NextFunction, Request, Response } from "express";
-import slugify from "slugify";
 import { TourDto } from "../../DTOs/tour.dto";
 import { isArray, validateOrReject, ValidationError } from "class-validator";
 import { AppDataSource } from "../../appDataSource";
 import { Tour } from "../../entities/tour.entity";
 import { formatValidationErrors } from "../../utilities/errors/ErrorFormatter";
-import { createAdditionalImages, createLocation } from "./helpers/helpers";
+import {
+  attachAdditionalImages,
+  attachLocations,
+  attachSlots,
+} from "./helpers/helpers";
+import { createSlug } from "../../utilities/slugify/slugify";
 
 export const createTour = async (
   req: Request,
@@ -29,17 +33,14 @@ export const createTour = async (
     tour.name = req.body.name;
     tour.difficulty = req.body.difficulty;
     tour.status = 1;
-    tour.slug = slugify(req.body.name, {
-      trim: true,
-      replacement: "-",
-      lower: true,
-    });
+    tour.slug = createSlug(req.body.name);
     tour.price = req.body.price;
     tour.priceDiscount = req.body.priceDiscount;
     tour.summary = req.body.summary;
     tour.description = req.body.description;
-    tour.additionalImages = createAdditionalImages(req.body.additionalImages);
-    tour.locations = await createLocation(req.body.locations);
+    tour.additionalImages = attachAdditionalImages(req.body.additionalImages);
+    tour.locations = await attachLocations(req.body.locations);
+    // tour.slots = await attachSlots(req.body.slots);
 
     await tourRepo.save(tour);
 
@@ -77,7 +78,12 @@ export const getAllTours = async (
         "locations",
         "locations.images",
         "locations.type",
+        "slots",
+        "slots.guides",
       ],
+      where: {
+        status: 1,
+      },
     });
 
     res.status(201).json({
