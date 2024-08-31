@@ -1,9 +1,9 @@
 import { plainToInstance } from "class-transformer";
 import { NextFunction } from "express";
-import { SlotDto } from "../../DTOs/slot.dto";
 import { validateOrReject } from "class-validator";
 import { AppDataSource } from "../../appDataSource";
-import { Slot } from "../../entities/slot.entity";
+import { UserDto } from "../../DTOs/user.dto";
+import { User } from "../../entities/user.entity";
 
 export const createSlots = async (
   req: Request,
@@ -20,14 +20,13 @@ export const updateSlots = async (
   next: NextFunction
 ) => {
   try {
-    const tourDto = plainToInstance(SlotDto, req.body);
+    const userDto = plainToInstance(UserDto, req.body);
 
-    // Validate the instance against the DTO class
-    await validateOrReject(tourDto, {
+    await validateOrReject(userDto, {
       whitelist: true,
       forbidNonWhitelisted: true,
     });
 
-    const slotRepo = AppDataSource.getRepository(Slot);
+    const userRepo = AppDataSource.getRepository(User);
   } catch (error) {}
 };

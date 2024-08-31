@@ -2,7 +2,7 @@ import "reflect-metadata";
 import express, { Request, Response } from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import { createTour } from "./controlllers/tour/tourController";
+import { createTour } from "./controlllers/tour/tour.controller";
 import TourRouter from "./routes/tourRoutes";
 
 const app = express();
